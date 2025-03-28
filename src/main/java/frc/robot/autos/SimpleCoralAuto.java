@@ -64,7 +64,7 @@ public class SimpleCoralAuto extends Command {
      */
     if(timer.get() < drive_seconds)
     {
-        m_drive.driveArcade(0.3, 0.0,false);
+        m_drive.driveArcade(-0.3, 0.0,false);
     }
     /**
      * Once the timer is greater than drive_seconds but less than exjest seconds,

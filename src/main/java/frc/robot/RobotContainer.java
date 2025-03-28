@@ -39,10 +39,11 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+  
   // You can remove this if you wish to have a single driver, note that you
   // may have to change the binding for left bumper.
-  private final CommandXboxController m_operatorController = 
-      new CommandXboxController(OperatorConstants.OPERATOR_CONTROLLER_PORT);
+  /*private final CommandXboxController m_driverController = 
+      new CommandXboxController(OperatorConstants.OPERATOR_CONTROLLER_PORT);*/
 
   // The autonomous chooser
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -87,8 +88,8 @@ public class RobotContainer {
      * joystick matches the WPILib convention of counter-clockwise positive
      */
     m_drive.setDefaultCommand(new DriveCommand(m_drive,
-        () -> -m_driverController.getLeftY(),
-        () -> -m_driverController.getRightX(),
+        () -> m_driverController.getLeftY(),
+        () -> m_driverController.getRightX(),
         () -> true));
 
     /**
@@ -100,41 +101,41 @@ public class RobotContainer {
      * 
      * When switching to single driver mode switch to the B button
      */
-    m_driverController.leftBumper().whileTrue(new DriveCommand(m_drive, 
-        () -> -m_driverController.getLeftY() * DriveConstants.SLOW_MODE_MOVE,  
-        () -> -m_driverController.getRightX() * DriveConstants.SLOW_MODE_TURN,
+    m_driverController.b().whileTrue(new DriveCommand(m_drive, 
+        () -> m_driverController.getLeftY() * DriveConstants.SLOW_MODE_MOVE,  
+        () -> m_driverController.getRightX() * DriveConstants.SLOW_MODE_TURN,
         () -> true));
 
     /**
      * Here we declare all of our operator commands, these commands could have been
      * written in a more compact manner but are left verbose so the intent is clear.
      */
-    m_operatorController.rightBumper().whileTrue(new AlgieInCommand(m_roller));
+    m_driverController.rightBumper().whileTrue(new AlgieInCommand(m_roller));
     
     // Here we use a trigger as a button when it is pushed past a certain threshold
-    m_operatorController.rightTrigger(.2).whileTrue(new AlgieOutCommand(m_roller));
+    m_driverController.rightTrigger(.2).whileTrue(new AlgieOutCommand(m_roller));
 
     /**
      * The arm will be passively held up or down after this is used,
      * make sure not to run the arm too long or it may get upset!
      */
-    m_operatorController.leftBumper().whileTrue(new ArmUpCommand(m_arm));
-    m_operatorController.leftTrigger(.2).whileTrue(new ArmDownCommand(m_arm));
+    m_driverController.leftBumper().whileTrue(new ArmUpCommand(m_arm));
+    m_driverController.leftTrigger(.2).whileTrue(new ArmDownCommand(m_arm));
 
     /**
      * Used to score coral, the stack command is for when there is already coral
      * in L1 where you are trying to score. The numbers may need to be tuned, 
      * make sure the rollers do not wear on the plastic basket.
      */
-    m_operatorController.x().whileTrue(new CoralOutCommand(m_roller));
-    m_operatorController.y().whileTrue(new CoralStackCommand(m_roller));
+    m_driverController.x().whileTrue(new CoralOutCommand(m_roller));
+    m_driverController.y().whileTrue(new CoralStackCommand(m_roller));
 
     /**
      * POV is a direction on the D-Pad or directional arrow pad of the controller,
      * the direction of this will be different depending on how your winch is wound
      */
-    m_operatorController.pov(0).whileTrue(new ClimberUpCommand(m_climber));
-    m_operatorController.pov(180).whileTrue(new ClimberDownCommand(m_climber));
+    m_driverController.pov(0).whileTrue(new ClimberUpCommand(m_climber));
+    m_driverController.pov(180).whileTrue(new ClimberDownCommand(m_climber));
   }
 
   /**
