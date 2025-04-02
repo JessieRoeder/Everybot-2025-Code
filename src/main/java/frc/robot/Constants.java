@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -27,6 +29,8 @@ public final class Constants {
     public static final double DRIVE_MOTOR_VOLTAGE_COMP = 12;
     public static final double SLOW_MODE_MOVE = 0.5;
     public static final double SLOW_MODE_TURN = 0.6;
+
+    public static final String CAMERA_NAME = "Limelight6648";
   }
 
   public static final class RollerConstants {
