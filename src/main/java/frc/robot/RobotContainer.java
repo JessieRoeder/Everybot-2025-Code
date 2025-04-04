@@ -14,6 +14,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.autos.DriveForwardAuto;
 import frc.robot.autos.SimpleCoralAuto;
+//import frc.robot.autos.LimelightCoralAuto;
 import frc.robot.commands.AlgieInCommand;
 import frc.robot.commands.AlgieOutCommand;
 import frc.robot.commands.ArmDownCommand;
@@ -55,6 +56,7 @@ public class RobotContainer {
   public final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   public final SimpleCoralAuto m_simpleCoralAuto = new SimpleCoralAuto(m_drive, m_roller, m_arm);
+  //public final LimelightCoralAuto m_driveLimelightAuto = new LimelightCoralAuto(m_drive, m_roller, m_arm);
   public final DriveForwardAuto m_driveForwardAuto = new DriveForwardAuto(m_drive);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -66,9 +68,12 @@ public class RobotContainer {
     // autoChooser.addOption
     m_chooser.setDefaultOption("Coral Auto", m_simpleCoralAuto);
     m_chooser.addOption("Drive Forward Auto", m_driveForwardAuto);
+    //m_chooser.addOption("Drive w/Limelight Auto", m_driveLimelightAuto);
     SmartDashboard.putData(m_chooser);
 
     CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
+
 
   }
 
