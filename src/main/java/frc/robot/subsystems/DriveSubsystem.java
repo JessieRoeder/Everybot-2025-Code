@@ -10,10 +10,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.LimelightHelpers;
 
 public class DriveSubsystem extends SubsystemBase {
   private final SparkMax leftLeader;
@@ -99,5 +99,41 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void driveTank(double leftSpeed, double rightSpeed, boolean squared){
     drive.tankDrive(leftSpeed, rightSpeed, squared);
+  }
+
+  public void Drive_Limelight_Tracking()
+  {
+    // These numbers must be tuned for your Robot!  Be careful!
+    final double STEER_K = 0.03;                    // how hard to turn toward the target
+    final double DRIVE_K = 0.26;                    // how hard to drive fwd toward the target
+    final double DESIRED_TARGET_AREA = 13.0;        // Area of the target when the robot reaches the wall
+    final double MAX_DRIVE = 0.7;                   // Simple speed limit so we don't drive too fast
+
+    double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
+    double ty = LimelightHelpers.getTY("");  // Vertical offset from crosshair to target in degrees
+    double ta = LimelightHelpers.getTA("");  // Target area (0% to 100% of image)
+    boolean hasTarget = LimelightHelpers.getTV(""); // Do you have a valid target?
+
+    double txnc = LimelightHelpers.getTXNC("");  // Horizontal offset from principal pixel/point to target in degrees
+    double tync = LimelightHelpers.getTYNC("");  // Vertical  offset from principal pixel/point to target in degrees
+
+    if (hasTarget = false)
+        {
+          drive.arcadeDrive(0.0, 0.0, false);
+          return;
+        }
+
+    // Start with proportional steering
+    double steer_cmd = tx * STEER_K;
+
+    // try to drive forward until the target area reaches our desired area
+    double drive_cmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
+
+    // don't let the robot drive too fast into the goal
+    if (drive_cmd > MAX_DRIVE)
+    {
+      drive_cmd = MAX_DRIVE;
+    }
+    drive.arcadeDrive(drive_cmd,steer_cmd);
   }
 }

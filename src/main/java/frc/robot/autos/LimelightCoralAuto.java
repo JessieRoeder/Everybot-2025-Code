@@ -23,6 +23,10 @@ public class LimelightCoralAuto extends Command {
     final double DESIRED_TARGET_AREA = 13.0;        // Area of the target when the robot reaches the wall
     final double MAX_DRIVE = 0.7;                   // Simple speed limit so we don't drive too fast
 
+    private double m_LimelightDriveCommand = 0.0;
+    private double m_LimelightSteerCommand = 0.0;
+  
+
     /**
      * This auto will have the robot drive forwards, stop, then drop the coral into L1
      * 
@@ -60,6 +64,8 @@ public class LimelightCoralAuto extends Command {
      */ 
     m_arm.runArm(ArmConstants.ARM_HOLD_UP);
 
+
+
     //get the LimeLight data
     double tx = LimelightHelpers.getTX("");  // Horizontal offset from crosshair to target in degrees
     double ty = LimelightHelpers.getTY("");  // Vertical offset from crosshair to target in degrees
@@ -68,6 +74,22 @@ public class LimelightCoralAuto extends Command {
 
     double txnc = LimelightHelpers.getTXNC("");  // Horizontal offset from principal pixel/point to target in degrees
     double tync = LimelightHelpers.getTYNC("");  // Vertical  offset from principal pixel/point to target in degrees
+
+    double steer_cmd = tx * STEER_K;
+    m_LimelightSteerCommand = steer_cmd;
+
+    // try to drive forward until the target area reaches our desired area
+    double drive_cmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
+
+    // don't let the robot drive too fast into the goal
+    if (drive_cmd > MAX_DRIVE)
+        {
+          drive_cmd = MAX_DRIVE;
+        }
+    m_LimelightDriveCommand = drive_cmd;
+
+
+
 
   }
 
